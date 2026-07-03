@@ -17,5 +17,5 @@ AI-Team — AI 團隊協作系統
 
 ## 三個家
 - 📋 本機：`~/Desktop/Claude/AI-Team/`
-- 🐙 GitHub：（push 完成後填入）
+- 🐙 GitHub：https://github.com/kadasup/AI-Team
 - 📘 Obsidian：`創作庫/AI-Team/AI-Team-工作筆記.md`
