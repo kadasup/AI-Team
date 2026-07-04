@@ -1,0 +1,370 @@
+/* ==========================================================================
+   AI-Team 練習範例：小遊戲樂園 — 共用設計語言
+   色系：珊瑚粉 × 杏桃橘 × 薄荷綠（暖色系、柔和飽和度）
+   ========================================================================== */
+
+:root {
+  --color-coral: #ff8a80;
+  --color-coral-dark: #ff6f61;
+  --color-apricot: #ffb677;
+  --color-apricot-light: #ffd9a0;
+  --color-mint: #7bdcb5;
+  --color-mint-light: #b8f2d9;
+  --color-cream: #fff8f0;
+  --color-text-dark: #5a4238;
+  --color-text-mid: #8a6f63;
+  --color-white: #ffffff;
+
+  --radius-lg: 20px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+
+  --shadow-soft: 0 8px 24px rgba(255, 138, 128, 0.18), 0 2px 8px rgba(255, 138, 128, 0.12);
+  --shadow-soft-hover: 0 16px 36px rgba(255, 138, 128, 0.28), 0 6px 14px rgba(255, 138, 128, 0.18);
+
+  --font-main: -apple-system, BlinkMacSystemFont, 'Microsoft JhengHei', 'PingFang TC',
+    'Segoe UI', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--font-main);
+  color: var(--color-text-dark);
+  background: linear-gradient(160deg, #fff5eb 0%, #ffe9de 35%, #ffe0d6 60%, #ffedd9 100%);
+  background-attachment: fixed;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 背景裝飾圓點，用純 CSS 畫出柔和點綴 */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(2px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+body::before {
+  width: 260px;
+  height: 260px;
+  top: -80px;
+  left: -80px;
+  background: radial-gradient(circle at 30% 30%, var(--color-mint-light), transparent 70%);
+  opacity: 0.7;
+}
+
+body::after {
+  width: 320px;
+  height: 320px;
+  bottom: -120px;
+  right: -100px;
+  background: radial-gradient(circle at 60% 40%, var(--color-apricot-light), transparent 70%);
+  opacity: 0.8;
+}
+
+.decor-dot {
+  position: fixed;
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.decor-dot--1 {
+  width: 60px;
+  height: 60px;
+  top: 12%;
+  right: 8%;
+  background: var(--color-coral);
+  opacity: 0.18;
+}
+
+.decor-dot--2 {
+  width: 40px;
+  height: 40px;
+  bottom: 18%;
+  left: 6%;
+  background: var(--color-mint);
+  opacity: 0.22;
+}
+
+.decor-dot--3 {
+  width: 90px;
+  height: 90px;
+  top: 45%;
+  right: -30px;
+  background: var(--color-apricot);
+  opacity: 0.15;
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 960px;
+  padding: 48px 24px 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* ---------- Hero / 歡迎區塊 ---------- */
+
+.hero {
+  margin-bottom: 48px;
+  animation: fade-in-up 0.7s ease both;
+}
+
+.hero__badge {
+  display: inline-block;
+  padding: 6px 18px;
+  background: var(--color-white);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-coral-dark);
+  box-shadow: var(--shadow-soft);
+  margin-bottom: 20px;
+  letter-spacing: 0.05em;
+}
+
+.hero__title {
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  font-weight: 900;
+  margin: 0 0 16px;
+  line-height: 1.25;
+  background: linear-gradient(90deg, var(--color-coral-dark), var(--color-apricot));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero__title .emoji {
+  -webkit-text-fill-color: initial;
+  color: initial;
+  display: inline-block;
+}
+
+.hero__subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  color: var(--color-text-mid);
+  max-width: 560px;
+  margin: 0 auto;
+  line-height: 1.7;
+  font-weight: 500;
+}
+
+/* ---------- 卡片區 ---------- */
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  width: 100%;
+}
+
+@media (max-width: 720px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.game-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  text-decoration: none;
+  color: var(--color-text-dark);
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: 40px 28px 34px;
+  box-shadow: var(--shadow-soft);
+  border: 3px solid transparent;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.28s ease,
+    border-color 0.28s ease;
+  animation: fade-in-up 0.7s ease both;
+}
+
+.game-card:nth-of-type(2) {
+  animation-delay: 0.12s;
+}
+
+.game-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.game-card--lottery::before {
+  background: linear-gradient(160deg, rgba(255, 182, 119, 0.16), rgba(255, 138, 128, 0.06));
+}
+
+.game-card--story::before {
+  background: linear-gradient(160deg, rgba(123, 220, 181, 0.18), rgba(184, 242, 217, 0.08));
+}
+
+.game-card:hover,
+.game-card:focus-visible {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: var(--shadow-soft-hover);
+}
+
+.game-card--lottery:hover,
+.game-card--lottery:focus-visible {
+  border-color: var(--color-apricot);
+}
+
+.game-card--story:hover,
+.game-card--story:focus-visible {
+  border-color: var(--color-mint);
+}
+
+.game-card:hover::before,
+.game-card:focus-visible::before {
+  opacity: 1;
+}
+
+.game-card:active {
+  transform: translateY(-3px) scale(0.99);
+}
+
+.game-card__emoji-wrap {
+  position: relative;
+  z-index: 1;
+  width: 96px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  font-size: 3rem;
+  transition: transform 0.28s ease;
+}
+
+.game-card--lottery .game-card__emoji-wrap {
+  background: linear-gradient(150deg, var(--color-apricot-light), #fff1de);
+}
+
+.game-card--story .game-card__emoji-wrap {
+  background: linear-gradient(150deg, var(--color-mint-light), #e9fbf3);
+}
+
+.game-card:hover .game-card__emoji-wrap {
+  transform: rotate(-6deg) scale(1.08);
+}
+
+.game-card__title {
+  position: relative;
+  z-index: 1;
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0 0 10px;
+}
+
+.game-card__desc {
+  position: relative;
+  z-index: 1;
+  font-size: 0.98rem;
+  color: var(--color-text-mid);
+  line-height: 1.6;
+  margin: 0 0 22px;
+  max-width: 320px;
+}
+
+.game-card__cta {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 28px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-white);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.game-card--lottery .game-card__cta {
+  background: linear-gradient(90deg, var(--color-coral-dark), var(--color-apricot));
+  box-shadow: 0 6px 16px rgba(255, 111, 97, 0.35);
+}
+
+.game-card--story .game-card__cta {
+  background: linear-gradient(90deg, #4fbf94, var(--color-mint));
+  box-shadow: 0 6px 16px rgba(123, 220, 181, 0.4);
+}
+
+.game-card:hover .game-card__cta {
+  transform: translateX(4px);
+}
+
+.game-card__cta .arrow {
+  transition: transform 0.2s ease;
+}
+
+.game-card:hover .game-card__cta .arrow {
+  transform: translateX(3px);
+}
+
+/* ---------- Footer ---------- */
+
+.page-footer {
+  margin-top: 56px;
+  font-size: 0.85rem;
+  color: var(--color-text-mid);
+  opacity: 0.85;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .page {
+    padding: 36px 16px 48px;
+  }
+
+  .game-card {
+    padding: 32px 20px 28px;
+  }
+}

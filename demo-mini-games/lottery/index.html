@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>尾牙抽獎嘉年華</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top-bar">
+    <h1 class="page-title">🎉 尾牙抽獎嘉年華 🎊</h1>
+    <a href="../index.html" class="home-link">🏠 回首頁</a>
+  </header>
+
+  <main class="layout">
+    <!-- 左／上：轉盤區 -->
+    <section class="wheel-section">
+      <div class="wheel-wrap">
+        <div class="wheel-pointer" aria-hidden="true">▼</div>
+        <canvas id="wheelCanvas" width="500" height="500"></canvas>
+        <div class="wheel-center-btn-wrap">
+          <button id="drawBtn" class="draw-btn" disabled>抽獎！</button>
+        </div>
+      </div>
+      <p id="statusMsg" class="status-msg">請先輸入名單</p>
+
+      <div class="result-banner" id="resultBanner" hidden>
+        <p id="resultText"></p>
+      </div>
+    </section>
+
+    <!-- 右／下：操作面板 -->
+    <section class="panel-section">
+
+      <div class="card">
+        <h2>📋 參加名單</h2>
+        <textarea id="nameInput" rows="4" placeholder="每行一個名字，例如：&#10;王小明&#10;陳大華&#10;李美美"></textarea>
+        <div class="btn-row">
+          <button id="addNamesBtn" class="btn btn-primary">新增到名單</button>
+          <button id="clearNamesBtn" class="btn btn-danger">清空名單</button>
+        </div>
+        <div class="list-box-wrap">
+          <p class="list-label">目前名單（<span id="nameCount">0</span> 人）</p>
+          <ul id="nameList" class="name-list"></ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>🎁 獎池設定</h2>
+        <div class="prize-config">
+          <div class="prize-row prize-row-grand">
+            <label for="grandCount">🏆 大獎 數量</label>
+            <input type="number" id="grandCount" min="0" value="1">
+            <span class="remain-badge">剩 <span id="grandRemain">1</span></span>
+          </div>
+          <div class="prize-row prize-row-mid">
+            <label for="midCount">🥈 中獎 數量</label>
+            <input type="number" id="midCount" min="0" value="3">
+            <span class="remain-badge">剩 <span id="midRemain">3</span></span>
+          </div>
+          <div class="prize-row prize-row-small">
+            <label for="smallCount">🎈 安慰獎 數量</label>
+            <input type="number" id="smallCount" min="0" value="6">
+            <span class="remain-badge">剩 <span id="smallRemain">6</span></span>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button id="applyPrizeBtn" class="btn btn-primary">套用獎池設定</button>
+          <button id="resetPrizeBtn" class="btn btn-secondary">重設剩餘數量</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>📜 抽獎歷史紀錄</h2>
+        <ul id="historyList" class="history-list">
+          <li class="history-empty">尚無抽獎紀錄</li>
+        </ul>
+      </div>
+
+    </section>
+  </main>
+
+  <div id="confettiLayer" class="confetti-layer" aria-hidden="true"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
